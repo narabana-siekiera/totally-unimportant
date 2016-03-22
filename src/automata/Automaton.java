@@ -70,4 +70,28 @@ public class Automaton {
 				);
 		return out;
 	}
+	public Boolean isExpAccepted(){
+		//TODO
+	}
+	public Automaton dopelnienie(Automaton automaton){
+		//TODO
+	}
+	public String getRegExp(){
+		//TODO
+		return "";
+	}
+	public Automaton(String regExp){
+		//TODO
+		
+	}
+	public Automaton determinize(){
+		//TODO
+	}
+	public Automaton minimize(){
+		//TODO
+	}
+	public addAutomaton(){
+		
+	}
+	
 }
