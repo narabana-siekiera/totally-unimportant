@@ -72,9 +72,11 @@ public class Automaton {
 	}
 	public Boolean isExpAccepted(){
 		//TODO
+            throw new UnsupportedOperationException();
 	}
 	public Automaton dopelnienie(Automaton automaton){
 		//TODO
+            throw new UnsupportedOperationException();
 	}
 	public String getRegExp(){
 		//TODO
@@ -82,16 +84,17 @@ public class Automaton {
 	}
 	public Automaton(String regExp){
 		//TODO
-		
 	}
 	public Automaton determinize(){
 		//TODO
+            throw new UnsupportedOperationException();
 	}
 	public Automaton minimize(){
 		//TODO
+            throw new UnsupportedOperationException();
 	}
-	public addAutomaton(){
-		
+	public void addAutomaton(){
+		throw new UnsupportedOperationException();
 	}
 	
 }
