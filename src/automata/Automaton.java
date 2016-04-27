@@ -1,6 +1,9 @@
 package automata;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class Automaton {
 	private Alphabet alphabet;
@@ -53,9 +56,29 @@ public class Automaton {
 				);
 		return out;
 	}
-	public Boolean isExpAccepted(){
-		//TODO
-		throw new UnsupportedOperationException();
+	
+	private Set<State> move(Set<State> cur, Symbol symbol){
+		Set<State> result = new HashSet<>();
+		for(State state : cur){
+			result.addAll(state.getTransitions(symbol));
+		}
+		return result;
+	}
+	
+	public boolean accepts(List<Symbol> word){
+		Set<State> cur = new HashSet<>();
+		cur.addAll(startingStates);
+		cur = move(cur, null);
+		for(Symbol symbol : word){
+			cur = move(cur, symbol);
+			cur = move(cur, null);
+		}
+		for(State state: cur){
+			if(state.isFinal()){
+				return true;
+			}
+		}
+		return false;
 	}
 	public Automaton dopelnienie(Automaton automaton){
 		//TODO
