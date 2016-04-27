@@ -72,28 +72,30 @@ public class Automaton {
 	}
 	public Boolean isExpAccepted(){
 		//TODO
-            throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 	public Automaton dopelnienie(Automaton automaton){
 		//TODO
-            throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 	public String getRegExp(){
 		//TODO
-		return "";
+		throw new UnsupportedOperationException();
 	}
 	public Automaton(String regExp){
 		//TODO
+		throw new UnsupportedOperationException();
 	}
 	public Automaton determinize(){
 		//TODO
-            throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 	public Automaton minimize(){
 		//TODO
-            throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 	public void addAutomaton(){
+		//TODO
 		throw new UnsupportedOperationException();
 	}
 	
