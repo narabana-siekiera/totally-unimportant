@@ -5,12 +5,20 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class State {
+class State {
+	private static int id = 0;
+
 	private String name;
-	private final Boolean isFinal;
-	private final Map<Symbol, Set<State>> transitions = new HashMap<>();
+	private Boolean isFinal;
+	private final Map<Symbol, Set<State>> transitions = new HashMap<Symbol, Set<State>>();
 	
-	public State(String name, Boolean isInitial, Boolean isFinal){
+	public State() {
+		name = String.format("s%02d", id);
+		this.isFinal = false;
+		++id;
+	}
+
+	public State(String name, Boolean isFinal) {
 		this.name=name;
 		this.isFinal=isFinal;
 	}
@@ -23,6 +31,10 @@ public class State {
 	}
 	public Boolean isFinal(){
 		return isFinal;
+	}
+
+	void markFinal() {
+		isFinal = true;
 	}
 	void addTransition(Symbol symbol, State to){
 		if(!transitions.containsKey(symbol)){

@@ -10,11 +10,11 @@ public class Main {
 		Alphabet L = new Alphabet();
 		L.addSymbol(zero);
 		L.addSymbol(one);
-		State A = new State("A", true, false);
+		State A = new State("A", false);
 		State B = new State("B");
-		State C = new State("C", false, true);
+		State C = new State("C", true);
 		State D = new State("D");
-		State E = new State("E", false, true);
+		State E = new State("E", true);
 		Automaton X= new Automaton();
 		X.setAlphabet(L);
 		X.addState(A);
