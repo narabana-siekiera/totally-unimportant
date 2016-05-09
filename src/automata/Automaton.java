@@ -1,16 +1,20 @@
 package automata;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Automaton {
+	// --- pola ---
+	
 	private Alphabet alphabet;
 	private LinkedList<State> states;
 	private LinkedList<State> startingStates = new LinkedList<State>();
 	
-	// --- konstruktor ---
+	// --- konstruktory ---
 	
 	public Automaton(){
 		alphabet=new Alphabet();
@@ -26,52 +30,33 @@ public class Automaton {
 	
 	// --- metody ---
 	
-	// prywatne
-
-	private boolean hasInitialState(){
-		return !startingStates.isEmpty();
-	}
-
-	private Boolean hasFinalState(){
-		for(State state: states){
-			if(state.isFinal()){
-				return new Boolean(true);
-			}
-		}
-		return new Boolean(false);
-	}
-	
-	// - chodzenie po automacie, akceptowanie slow
-
-	private Set<State> move(Set<State> cur, Symbol symbol){
-		Set<State> result = new HashSet<State>();
-		for(State state : cur){
-			result.addAll(state.getTransitions(symbol));
-		}
-		return result;
-	}
-	
-	private Set<State> moveEpsilon(Set<State> states) {
-		Set<State> result = new HashSet<State>();
-		Set<State> toAdd = new HashSet<State>();
-		toAdd.addAll(states);
-		while (!toAdd.isEmpty()) {
-			result.addAll(toAdd);
-			Set<State> nextToAdd = new HashSet<State>();
-			for (State newState : toAdd) {
-				Set<State> epsi = newState.getTransitions(null);
-				for (State es : epsi) {
-					if (!result.contains(es))
-						nextToAdd.add(es);
-				}
-			}
-			toAdd = nextToAdd;
-		}
-		return result;
-	}
-
 	// publiczne
 
+	public Automaton copy(){
+		Automaton a = new Automaton();
+		a.alphabet = this.alphabet;
+		Map<State, State> newStates = new HashMap<State, State>();
+		for(State s : this.states){
+			State copyS = new State();
+			if(s.isFinal())
+				copyS.markFinal();
+			newStates.put(s, copyS);
+			a.states.add(copyS);
+		}
+		for(State s : this.startingStates){
+			a.startingStates.add(newStates.get(s));
+		}
+		for(State s : this.states){
+			State copyS = newStates.get(s);
+			for(Symbol e : s.getOutgoingSymbols()){
+				for(State to : s.getTransitions(e)){
+					copyS.addTransition(e, newStates.get(to));
+				}
+			}
+		}
+		return a;
+	}
+	
 	public void addState(State state) {
 		states.add(state);
 	}
@@ -125,7 +110,7 @@ public class Automaton {
 		}
 		return false;
 	}
-	public Automaton dopelnienie(Automaton automaton){
+	public Automaton complement(Automaton automaton){
 		//TODO
 		throw new UnsupportedOperationException();
 	}
@@ -141,8 +126,68 @@ public class Automaton {
 		//TODO
 		throw new UnsupportedOperationException();
 	}
-	public void addAutomaton(){
-		//TODO
+	
+	public Automaton sum(Automaton B){
+		if(B == null)
+			throw new IllegalArgumentException();
+		if(this.alphabet != B.alphabet) // porownujemy referencje, przyjmujemy ze automaty musza miec ten sam obiekt alfabetu
+			throw new IllegalArgumentException();
+		Automaton copyA = this.copy();
+		Automaton copyB = B.copy();
+		Automaton C = new Automaton();
+		C.alphabet = this.alphabet;
+		C.states.addAll(copyA.states);
+		C.states.addAll(copyB.states);
+		C.startingStates.addAll(copyA.startingStates);
+		C.startingStates.addAll(copyB.startingStates);
+		return C;
+	}
+	
+	public Automaton product(Automaton B){
 		throw new UnsupportedOperationException();
+	}
+	
+	// prywatne
+
+	private boolean hasInitialState(){
+		return !startingStates.isEmpty();
+	}
+
+	private Boolean hasFinalState(){
+		for(State state: states){
+			if(state.isFinal()){
+				return new Boolean(true);
+			}
+		}
+		return new Boolean(false);
+	}
+	
+	// - chodzenie po automacie, akceptowanie slow
+
+	private Set<State> move(Set<State> cur, Symbol symbol){
+		Set<State> result = new HashSet<State>();
+		for(State state : cur){
+			result.addAll(state.getTransitions(symbol));
+		}
+		return result;
+	}
+	
+	private Set<State> moveEpsilon(Set<State> states) {
+		Set<State> result = new HashSet<State>();
+		Set<State> toAdd = new HashSet<State>();
+		toAdd.addAll(states);
+		while (!toAdd.isEmpty()) {
+			result.addAll(toAdd);
+			Set<State> nextToAdd = new HashSet<State>();
+			for (State newState : toAdd) {
+				Set<State> epsi = newState.getTransitions(null);
+				for (State es : epsi) {
+					if (!result.contains(es))
+						nextToAdd.add(es);
+				}
+			}
+			toAdd = nextToAdd;
+		}
+		return result;
 	}
 }

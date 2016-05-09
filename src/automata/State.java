@@ -48,6 +48,11 @@ class State {
 		else
 			return new HashSet<State>();
 	}
+	Set<Symbol> getOutgoingSymbols(){
+		Set<Symbol> outSymbols = new HashSet<Symbol>();
+		outSymbols.addAll(transitions.keySet());
+		return outSymbols;
+	}
 	@Override
 	public String toString(){
 		return name+(isFinal()?"[F]":"");
