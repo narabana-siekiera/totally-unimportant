@@ -42,6 +42,12 @@ class State {
 		}
 		transitions.get(symbol).add(to);
 	}
+	void addTransitions(Symbol symbol, Set<State> toStates){
+		if(!transitions.containsKey(symbol)){
+			transitions.put(symbol, new HashSet<State>());
+		}
+		transitions.get(symbol).addAll(toStates);
+	}
 	Set<State> getTransitions(Symbol symbol){
 		if(transitions.containsKey(symbol))
 			return transitions.get(symbol);

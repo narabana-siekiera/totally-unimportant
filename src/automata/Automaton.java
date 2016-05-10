@@ -1,18 +1,22 @@
 package automata;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+
+import sun.applet.resources.MsgAppletViewer;
 
 public class Automaton {
 	// --- pola ---
 	
 	private Alphabet alphabet;
 	private LinkedList<State> states;
-	private LinkedList<State> startingStates = new LinkedList<State>();
+	private Set<State> startingStates = new HashSet<State>();
 	
 	// --- konstruktory ---
 	
@@ -103,12 +107,7 @@ public class Automaton {
 			cur = move(cur, symbol);
 			cur = moveEpsilon(cur);
 		}
-		for(State state: cur){
-			if(state.isFinal()){
-				return true;
-			}
-		}
-		return false;
+		return containsFinal(cur);
 	}
 	public Automaton complement(Automaton automaton){
 		//TODO
@@ -119,8 +118,47 @@ public class Automaton {
 		throw new UnsupportedOperationException();
 	}
 	public Automaton determinize(){
-		//TODO
-		throw new UnsupportedOperationException();
+		Automaton D = new Automaton();
+		D.alphabet = alphabet;
+		
+		Automaton A = this.copy();
+		// domknij przejscia po epsilonie
+		A.startingStates = A.moveEpsilon(A.startingStates);
+		for(State s : A.states){
+			for(Symbol e : s.getOutgoingSymbols()){
+				s.addTransitions(e, A.moveEpsilon(s.getTransitions(e)));
+			}
+		}
+		// zbuduj automat potegowy
+		Queue<Set<State>> toVisit = new LinkedList<Set<State>>();
+		Map<Set<State>, State> visited = new HashMap<Set<State>, State>();
+		
+		State startState = new State();
+		toVisit.add(A.startingStates);
+		visited.put(A.startingStates, startState);
+		D.startingStates.add(startState);
+		
+		while(!toVisit.isEmpty()){
+			Set<State> curSetState = toVisit.poll();
+			State curState = visited.get(curSetState);
+			if(A.containsFinal(curSetState))
+				curState.markFinal();
+			Set<Symbol> symbols = new HashSet<Symbol>();
+			for(State s : curSetState){
+				symbols.addAll(s.getOutgoingSymbols());
+			}
+			for(Symbol sym : symbols){
+				if(sym == null) continue;
+				Set<State> newSetState = A.move(curSetState, sym);
+				if(!visited.containsKey(newSetState)){
+					toVisit.add(newSetState);
+					visited.put(newSetState, new State());
+				}
+				curState.addTransition(sym, visited.get(newSetState));
+			}
+		}
+		D.states.addAll(visited.values());
+		return D;
 	}
 	public Automaton minimize(){
 		//TODO
@@ -172,7 +210,7 @@ public class Automaton {
 		return result;
 	}
 	
-	private Set<State> moveEpsilon(Set<State> states) {
+	private Set<State> moveEpsilon(Collection<State> states) {
 		Set<State> result = new HashSet<State>();
 		Set<State> toAdd = new HashSet<State>();
 		toAdd.addAll(states);
@@ -189,5 +227,14 @@ public class Automaton {
 			toAdd = nextToAdd;
 		}
 		return result;
+	}
+	
+	private boolean containsFinal(Set<State> states){
+		for(State s: states){
+			if(s.isFinal()){
+				return true;
+			}
+		}
+		return false;
 	}
 }
