@@ -25,4 +25,18 @@ public class TestUtils {
 			System.out.println(e);
 		}
 	}
+	
+	static void testWordOnAutomatons(String word, Automaton... automatons){
+		try{
+			List<Symbol> covertedWord = convertWordToSymbols(word);
+			System.out.print("Automaton accepts " + word + "?...");
+			for(Automaton a : automatons) {
+				System.out.print("   " + a.accepts(covertedWord));
+			}
+			System.out.println();
+		} catch (Exception e) {
+			System.out.println("ERROR");
+			System.out.println(e);
+		}
+	}
 }

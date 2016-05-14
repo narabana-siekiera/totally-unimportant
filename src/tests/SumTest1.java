@@ -13,26 +13,12 @@ public class SumTest1 {
 		Automaton B = new Automaton(regExB);
 		Automaton C = A.sum(B);
 		
-		System.out.println("Test A:");
-		TestUtils.testAccept(A, "");
-		TestUtils.testAccept(A, "0");
-		TestUtils.testAccept(A, "1");
-		TestUtils.testAccept(A, "01");
-		TestUtils.testAccept(A, "10");
-		
-		System.out.println("Test B:");
-		TestUtils.testAccept(B, "");
-		TestUtils.testAccept(B, "0");
-		TestUtils.testAccept(B, "1");
-		TestUtils.testAccept(B, "01");
-		TestUtils.testAccept(B, "10");
-		
-		System.out.println("Test C = A+B:");
-		TestUtils.testAccept(C, "");
-		TestUtils.testAccept(C, "0");
-		TestUtils.testAccept(C, "1");
-		TestUtils.testAccept(C, "01");
-		TestUtils.testAccept(C, "10");
+		System.out.println("Test A, B, C = A+B:");
+		TestUtils.testWordOnAutomatons("", A, B, C);
+		TestUtils.testWordOnAutomatons("0", A, B, C);
+		TestUtils.testWordOnAutomatons("1", A, B, C);
+		TestUtils.testWordOnAutomatons("01", A, B, C);
+		TestUtils.testWordOnAutomatons("10", A, B, C);
 	}
 
 }
