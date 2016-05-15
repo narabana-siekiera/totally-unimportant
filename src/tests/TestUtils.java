@@ -16,6 +16,10 @@ public class TestUtils {
 		return res;
 	}
 
+	/**
+	 * Testuje czy automat automaton akcpetuje slowo word i wypisuje wynik. Robi 
+	 * konwersje z ciagu znakow (string) do ciagu symboli (lista obiektow Symbol).
+	 */
 	static void testAccept(Automaton automaton, String word) {
 		System.out.print("Automat accepts " + word + "?... ");
 		try{
@@ -26,6 +30,10 @@ public class TestUtils {
 		}
 	}
 	
+	/**
+	 * Testuje czy podane slowo jest akceptowane przez podane automaty i wypisuje wyniki. 
+	 * Robi konwersje z ciagu znakow (string) do ciagu symboli (lista obiektow Symbol).
+	 */
 	static void testWordOnAutomatons(String word, Automaton... automatons){
 		try{
 			List<Symbol> covertedWord = convertWordToSymbols(word);

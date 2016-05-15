@@ -22,12 +22,19 @@ class RegExAutomaton {
 		states.add(finalState);
 	}
 	
+	/**
+	 * Dolacz do tego automatu podany automat.
+	 */
 	void concatenate(RegExAutomaton automaton) {
 		finalState.addTransition(null, automaton.startState);
 		states.addAll(automaton.states);
 		finalState = automaton.finalState;
 	}
 
+	/**
+	 * Dodaj do tego automatu podany automat, tak zeby akceptowac zlowa zarowno z jednego
+	 * jak i z drugiego automatu.
+	 */
 	void sum(RegExAutomaton automaton) {
 		State newStart = new State();
 		State newFinal = new State();
@@ -42,6 +49,9 @@ class RegExAutomaton {
 		finalState = newFinal;
 	}
 
+	/**
+	 * Zmien ten automat w automat akcpetujacy konkatenacje dowolnej ilosci slow z tego automatu.
+	 */
 	void star() {
 		State newStart = new State();
 		State newFinal = new State();

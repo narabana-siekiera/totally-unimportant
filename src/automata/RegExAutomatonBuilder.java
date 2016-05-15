@@ -5,6 +5,9 @@ package automata;
  */
 public class RegExAutomatonBuilder {
 
+	/**
+	 * Funkcja pomocnicza, laczy ze soba (jesli trzeba) dwa automaty i zwraca polaczenie.
+	 */
 	private RegExAutomaton joinLeftLast(RegExAutomaton left, RegExAutomaton last) {
 		if (left == null)
 			return last;
@@ -13,6 +16,9 @@ public class RegExAutomatonBuilder {
 		return left;
 	}
 
+	/**
+	 * Zbuduj automat z tego wyrazenia regularnego.
+	 */
 	RegExAutomaton buildAutomaton(String regEx) {
 		RegExAutomaton left = null;
 		RegExAutomaton last = null;

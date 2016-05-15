@@ -25,6 +25,10 @@ public class Symbol {
 		return symbol.hashCode();
 	}
 
+	/**
+	 * Porownanie czy dwa obiekty sa sobie rowne na wartosc - czyli czy maja ten sam 
+	 * symbol, tj. ciag znakow jaki reprezentuja.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null)
