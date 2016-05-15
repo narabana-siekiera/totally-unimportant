@@ -1,5 +1,8 @@
 package automata;
 
+/**
+ * Klasa sluzaca do budowania tymczasowego automatu z wyrazenia regularnego.
+ */
 public class RegExAutomatonBuilder {
 
 	private RegExAutomaton joinLeftLast(RegExAutomaton left, RegExAutomaton last) {
@@ -40,6 +43,8 @@ public class RegExAutomatonBuilder {
 					throw new IllegalArgumentException();
 				left = joinLeftLast(left, last);
 				last = buildAutomaton(regEx.substring(pos + 1));
+				left.sum(last);
+				last = null;
 				pos = regEx.length() - 1;
 				break;
 			default:

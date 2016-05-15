@@ -10,6 +10,11 @@ public class DeterminizeTest1 {
 		System.out.println("Determinize...");
 		Automaton D = A.determinize();
 		
+		System.out.println("A:");
+		A.print();
+		System.out.println("D:");
+		D.print();
+		
 		System.out.println("\nTest A and D:");
 		TestUtils.testWordOnAutomatons("1", A, D);
 		TestUtils.testWordOnAutomatons("", A, D);

@@ -63,4 +63,8 @@ class State {
 	public String toString(){
 		return name+(isFinal()?"[F]":"");
 	}
+	
+	public String print(){
+		return " " + this + " -> " + transitions;
+	}
 }

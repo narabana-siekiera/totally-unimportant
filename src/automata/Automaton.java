@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import sun.applet.resources.MsgAppletViewer;
-
 public class Automaton {
 	// --- pola ---
 	
@@ -95,8 +93,16 @@ public class Automaton {
 		for (State x : states) {
 			statesh = new String(statesh + " " + x.toString());
 		}
-		String out = new String("Alphabet:" + alphabet.toString() + "\n" + "States:" + statesh + "\n");
+		String out = new String("Alphabet:" + alphabet + "\n" + "States:" + statesh + "\n");
 		return out;
+	}
+	
+	public void print() {
+		System.out.println("Automat (" + ((alphabet == null) ? "" : alphabet) + "):");
+		for(State s : states){
+			System.out.println(s.print());
+		}
+		System.out.println("starting: " + startingStates);
 	}
 
 	public boolean accepts(List<Symbol> word){
