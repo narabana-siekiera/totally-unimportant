@@ -10,21 +10,30 @@ class State {
 
 	private String name;
 	private Boolean isFinal;
+	private Boolean isStart;
 	private final Map<Symbol, Set<State>> transitions = new HashMap<Symbol, Set<State>>();
 	
 	public State() {
 		name = String.format("s%02d", id);
 		this.isFinal = false;
+		this.isStart = false;
 		++id;
 	}
 
 	public State(String name, Boolean isFinal) {
 		this.name=name;
 		this.isFinal=isFinal;
+		this.isStart=false;
+	}
+	public State (String name, Boolean isFinal, Boolean isStart){
+		this.name=name;
+		this.isFinal=isFinal;
+		this.isStart=isStart;
 	}
 	public State(String name){
 		this.name=name;
 		this.isFinal=false;
+		this.isStart= false;
 	}
 	public String getName(){
 		return name;
@@ -32,9 +41,21 @@ class State {
 	public Boolean isFinal(){
 		return isFinal;
 	}
+	public Boolean isStart(){
+		return isStart;
+	}
 
 	void markFinal() {
 		isFinal = true;
+	}
+	void markStart(){
+		isStart = true;
+	}
+	void toggleFinal(){
+		isFinal=!isFinal;
+	}
+	void toggleStart(){
+		isStart=!isStart;
 	}
 	void addTransition(Symbol symbol, State to){
 		if(!transitions.containsKey(symbol)){
@@ -54,6 +75,9 @@ class State {
 		else
 			return new HashSet<State>();
 	}
+	Map<Symbol, Set<State>> getTransitionsMap(){
+		return transitions;
+	}
 	Set<Symbol> getOutgoingSymbols(){
 		Set<Symbol> outSymbols = new HashSet<Symbol>();
 		outSymbols.addAll(transitions.keySet());
@@ -66,5 +90,8 @@ class State {
 	
 	public String print(){
 		return " " + this + " -> " + transitions;
+	}
+	public void clearTransitions(){
+		transitions.clear();
 	}
 }

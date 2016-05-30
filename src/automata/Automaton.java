@@ -14,16 +14,17 @@ import java.util.Set;
  */
 public class Automaton {
 	// --- pola ---
-	
+	public String name;
 	private Alphabet alphabet;
 	private LinkedList<State> states;
-	private Set<State> startingStates = new HashSet<State>();
+	private Set<State> startingStates;
 	
 	// --- konstruktory ---
 	
 	public Automaton(){
 		alphabet=new Alphabet();
 		states = new LinkedList<State>();
+		startingStates = new HashSet<State>();
 	}
 	
 	/**
@@ -51,6 +52,8 @@ public class Automaton {
 		Automaton a = new Automaton();
 		// kopia alfabetu - przepisz referencje
 		a.alphabet = this.alphabet;
+		//kopia nazwy
+		a.name=this.name +"kopia";
 		// kopia stanow - mapuj kazdy stan w nowy stan
 		Map<State, State> newStates = new HashMap<State, State>();
 		for(State s : this.states){
@@ -77,7 +80,12 @@ public class Automaton {
 	}
 	
 	public void addState(State state) {
-		states.add(state);
+		if(state.isStart()){
+			startingStates.add(state);
+		}
+		else{
+			states.add(state);
+		}
 	}
 
 	public void addTransition(State from, Symbol symbol, State to) {
@@ -91,11 +99,20 @@ public class Automaton {
 	public void setAlphabet(Alphabet alphabet) {
 		this.alphabet = alphabet;
 	}
-
+	
 	public LinkedList<State> getStates() {
 		return states;
 	}
-
+	public LinkedList<State> getAllStates(){
+		LinkedList<State> states = new LinkedList<State>();
+		for(State S : this.states){
+			states.add(S);
+		}
+		for(State S: startingStates){
+			states.add(S);
+		}
+		return states;
+	}
 	public void setStates(LinkedList<State> states) {
 		this.states = states;
 	}
@@ -141,13 +158,26 @@ public class Automaton {
 		}
 		return containsFinal(cur); // sprawdz czy doszlismy do jakiegos stanu koncowego
 	}
+	/**
+	 * zwraca automat bedacy dopelnieniem argumentu
+	 * @param automaton
+	 * @return automaton - dopelnienie argumentu
+	 */
 	public Automaton complement(Automaton automaton){
-		//TODO
-		throw new UnsupportedOperationException();
+		Automaton L = automaton.copy();
+		Automaton M = new Automaton();
+		M.setAlphabet(L.getAlphabet());
+		
+		for(State x: L.getAllStates()){
+			x.toggleFinal();
+			M.addState(x);
+		}
+		return M;
 	}
 	public String getRegExp(){
-		//TODO
-		throw new UnsupportedOperationException();
+		RegExBuilder R= new RegExBuilder (this);
+		return R.getRegEx();
+		//throw new UnsupportedOperationException();
 	}
 	/**
 	 * Zwraca automat, ktory odpowiada zdeterminizowanemu automatowi. Zdeterminizowany auomat
@@ -204,10 +234,9 @@ public class Automaton {
 		return D;
 	}
 	public Automaton minimize(){
-		//TODO
-		throw new UnsupportedOperationException();
+		Shrinker S = new Shrinker(this);
+		return S.minimize();		
 	}
-	
 	/**
 	 * Zwraca sume tego automatu z podanym automatem B. Suma automatow, to automat akceptujacy slowa
 	 * rozpoznawane przez dowolny z tych dwoch automatow. Ten automat nie zostaje zmodyfikowany.
@@ -232,9 +261,24 @@ public class Automaton {
 		C.startingStates.addAll(copyB.startingStates); // jak i z B
 		return C;
 	}
-	
+	/**
+	 * Zwraca automat bedacy przecieciem tego automatu z automatem B
+	 * dziala indentycznie jak suma oprocz tego ze jest przecieciem :D
+	 * @param B
+	 * @return
+	 */
 	public Automaton product(Automaton B){
-		throw new UnsupportedOperationException();
+		if(B == null)
+			throw new IllegalArgumentException();
+		if(this.alphabet != B.alphabet) // porownujemy referencje, przyjmujemy ze automaty musza miec ten sam obiekt alfabetu
+			throw new IllegalArgumentException();
+		Automaton L = this.copy();
+		Automaton M = B.copy();		
+		L= complement(L);
+		M= complement(M);
+		L.sum(M);
+		L=complement(L);
+		return L;		
 	}
 	
 	// prywatne

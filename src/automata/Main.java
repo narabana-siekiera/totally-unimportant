@@ -15,6 +15,7 @@ public class Main {
 		State C = new State("C", true);
 		State D = new State("D");
 		State E = new State("E", true);
+		A.markStart();
 		Automaton X= new Automaton();
 		X.setAlphabet(L);
 		X.addState(A);
@@ -25,6 +26,11 @@ public class Main {
 		X.addTransition(A, one, C);
 		X.addTransition(B, zero, B);
 		X.addTransition(B, one, D);
-		System.out.println(X.toString());
+		//System.out.println(X.toString());
+		//Automaton Y = X.complement(X);
+		//System.out.println(Y.toString());
+		X.print();
+		X.determinize().print();
+		X.minimize().print();;
 	}
 }
