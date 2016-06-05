@@ -39,6 +39,8 @@ public class RegExAutomatonBuilder {
 			case '(':
 				left = joinLeftLast(left, last);
 				int close = regEx.indexOf(')', pos);
+				if(close == -1)
+					throw new IllegalArgumentException();
 				last = buildAutomaton(regEx.substring(pos + 1, close)); // !
 				pos = close;
 				break;

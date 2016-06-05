@@ -14,10 +14,10 @@ import java.util.Set;
  */
 public class Automaton {
 	// --- pola ---
-	public String name;
+	private String name;
 	private Alphabet alphabet;
-	private LinkedList<State> states;
-	private Set<State> startingStates;
+	private LinkedList<State> states; // wszystkie stany automatu, lacznie ze startowymi!
+	private Set<State> startingStates; // referencje do stanow startowych - podzbior listy states
 	
 	// --- konstruktory ---
 	
@@ -33,8 +33,10 @@ public class Automaton {
 	 * @param regExp wyrazenie regularne
 	 */
 	public Automaton(String regExp){
+		alphabet=new Alphabet();
 		RegExAutomaton res = new RegExAutomatonBuilder().buildAutomaton(regExp);
 		states = res.states;
+		startingStates = new HashSet<State>();
 		startingStates.add(res.startState);
 		res.finalState.markFinal();
     }
@@ -80,11 +82,9 @@ public class Automaton {
 	}
 	
 	public void addState(State state) {
+		states.add(state);
 		if(state.isStart()){
 			startingStates.add(state);
-		}
-		else{
-			states.add(state);
 		}
 	}
 
@@ -98,6 +98,14 @@ public class Automaton {
 
 	public void setAlphabet(Alphabet alphabet) {
 		this.alphabet = alphabet;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public void setName(String name){
+		this.name = name;
 	}
 	
 	public LinkedList<State> getStates() {
@@ -123,23 +131,30 @@ public class Automaton {
 
 	@Override
 	public String toString() {
-		String statesh = new String();
-		for (State x : states) {
-			statesh = new String(statesh + " " + x.toString());
+		return name;
+	}
+	
+	/**
+	 * Wypisz automat.
+	 */
+	public String getPrint() {
+		StringBuilder res = new StringBuilder();
+		res.append("Automat (" + ((alphabet == null) ? "" : alphabet) + "):");
+		res.append("\n");
+		for(State s : states){
+			res.append(s.getPrint());
+			res.append("\n");
 		}
-		String out = new String("Alphabet:" + alphabet + "\n" + "States:" + statesh + "\n");
-		return out;
+		res.append("starting: " + startingStates);
+		res.append("\n");
+		return res.toString();
 	}
 	
 	/**
 	 * Wypisz automat.
 	 */
 	public void print() {
-		System.out.println("Automat (" + ((alphabet == null) ? "" : alphabet) + "):");
-		for(State s : states){
-			System.out.println(s.print());
-		}
-		System.out.println("starting: " + startingStates);
+		System.out.println(getPrint());
 	}
 	
 	/**

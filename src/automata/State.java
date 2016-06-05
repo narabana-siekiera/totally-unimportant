@@ -88,7 +88,7 @@ class State {
 		return name+(isFinal()?"[F]":"");
 	}
 	
-	public String print(){
+	public String getPrint(){
 		return " " + this + " -> " + transitions;
 	}
 	public void clearTransitions(){
