@@ -227,6 +227,7 @@ public class Automaton {
 		while(!toVisit.isEmpty()){
 			Set<State> curSetState = toVisit.poll(); // rozpatrujemy ten stan (podzbior stanow)
 			State curState = visited.get(curSetState); // pobieramy odpowiadajacy mu obiekt stanu w D
+			D.states.add(curState); // dodajemy go do listy stanow w D
 			if(A.containsFinal(curSetState)) // jesli stan zawiera ktorys ze stanow koncowych, to jest koncowy
 				curState.markFinal();
 			// sprawdz jakie krawedzie (symbole) wychodza z tego zbioru stanow
@@ -245,7 +246,6 @@ public class Automaton {
 				curState.addTransition(sym, visited.get(newSetState)); /// dodajemy krawedz w D
 			}
 		}
-		D.states.addAll(visited.values()); // dodajemy wszystkie stany jakie odwiedzilismy
 		return D;
 	}
 	public Automaton minimize(){
